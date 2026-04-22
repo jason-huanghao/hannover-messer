@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HM2026 · 参馆作战手册</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0f0f0f;
+  --bg2: #181818;
+  --bg3: #222;
+  --border: #2a2a2a;
+  --border2: #333;
+  --text: #e8e6e0;
+  --text2: #999;
+  --text3: #555;
+  --accent: #c8f05a;
+  --accent2: #5af0c8;
+  --warn: #f0a83a;
+  --red: #f05a5a;
+
+  --c1: #c8f05a;   /* Fraunhofer - lime */
+  --c2: #5af0c8;   /* DFKI - teal */
+  --c3: #a78bfa;   /* ApeiroRA - violet */
+  --c4: #f0a83a;   /* Bosch - amber */
+  --c5: #3ab0f0;   /* SAP - blue */
+  --c6: #f05a9a;   /* AWS - pink */
+  --c7: #f07a3a;   /* Siemens/Ethon - orange */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+}
+
+/* ─── TOP BAR ─── */
+.topbar {
+  position: sticky; top: 0; z-index: 100;
+  background: #0a0a0a;
+  border-bottom: 1px solid var(--border2);
+  padding: 10px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 8px;
+}
+.topbar-title { font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: var(--accent); letter-spacing: 0.05em; }
+.topbar-warn { font-size: 11px; background: rgba(240,168,58,0.12); border: 1px solid rgba(240,168,58,0.3); color: var(--warn); padding: 4px 10px; border-radius: 4px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ─── HERO ─── */
+.hero {
+  padding: 28px 16px 20px;
+  border-bottom: 1px solid var(--border);
+}
+.hero h1 { font-size: clamp(22px, 5vw, 32px); font-weight: 600; letter-spacing: -0.02em; line-height: 1.2; }
+.hero h1 span { color: var(--accent); }
+.hero-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.hero-pill { font-family: 'IBM Plex Mono', monospace; font-size: 11px; padding: 3px 9px; border-radius: 3px; border: 1px solid var(--border2); color: var(--text2); }
+
+/* ─── SCHEDULE STRIP ─── */
+.schedule {
+  overflow-x: auto;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--border);
+  display: flex; gap: 0;
+}
+.sched-item {
+  flex-shrink: 0;
+  min-width: 110px;
+  padding: 8px 10px;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+.sched-item:last-child { border-right: none; }
+.sched-time { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: 3px; }
+.sched-co { font-size: 11px; font-weight: 500; }
+.sched-loc { font-size: 10px; color: var(--text2); margin-top: 2px; }
+.sched-dot { display: block; width: 6px; height: 6px; border-radius: 50%; margin-bottom: 5px; }
+
+/* ─── NAV PILLS ─── */
+.nav-pills {
+  display: flex; gap: 6px; flex-wrap: wrap;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border);
+}
+.nav-pill {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px; font-weight: 500;
+  padding: 5px 11px; border-radius: 3px;
+  cursor: pointer; border: 1px solid var(--border2);
+  color: var(--text2); background: transparent;
+  transition: all 0.15s;
+  text-decoration: none; display: inline-block;
+}
+.nav-pill:hover { color: var(--text); border-color: #555; }
+
+/* ─── COMPANY SECTION ─── */
+.company { border-bottom: 1px solid var(--border); }
+
+.co-header {
+  padding: 18px 16px 14px;
+  cursor: pointer;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+  user-select: none;
+}
+.co-header:hover { background: rgba(255,255,255,0.02); }
+
+.co-meta { flex: 1; }
+.co-num { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: 4px; letter-spacing: 0.1em; }
+.co-name { font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
+.co-tagline { font-size: 12px; color: var(--text2); margin-top: 3px; }
+.co-badges { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.badge { font-family: 'IBM Plex Mono', monospace; font-size: 10px; padding: 2px 7px; border-radius: 3px; border: 1px solid; }
+.badge-loc { border-color: var(--border2); color: var(--text2); }
+.badge-match { color: #c8f05a; border-color: rgba(200,240,90,0.3); background: rgba(200,240,90,0.06); }
+.badge-collab { color: var(--warn); border-color: rgba(240,168,58,0.3); background: rgba(240,168,58,0.06); }
+.badge-job { color: var(--accent2); border-color: rgba(90,240,200,0.3); background: rgba(90,240,200,0.06); }
+.badge-warn { color: var(--red); border-color: rgba(240,90,90,0.3); background: rgba(240,90,90,0.06); }
+
+.co-toggle { font-size: 18px; color: var(--text3); flex-shrink: 0; transition: transform 0.2s; margin-top: 2px; }
+.co-toggle.open { transform: rotate(45deg); }
+
+.co-body { display: none; padding: 0 16px 20px; }
+.co-body.open { display: block; }
+
+/* ─── VISIT GOAL ─── */
+.goal-box {
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+}
+.goal-box .goal-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); letter-spacing: 0.08em; margin-bottom: 6px; }
+.goal-box .goal-text { font-size: 13px; line-height: 1.7; }
+.goal-box .goal-text strong { font-weight: 600; }
+
+/* ─── SNAPSHOT ─── */
+.snapshot { margin-bottom: 18px; }
+.section-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px; letter-spacing: 0.1em;
+  color: var(--text3);
+  text-transform: uppercase;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+
+.snapshot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+@media (max-width: 500px) { .snapshot-grid { grid-template-columns: 1fr; } }
+
+.snap-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; }
+.snap-key { font-size: 10px; color: var(--text3); margin-bottom: 3px; font-family: 'IBM Plex Mono', monospace; }
+.snap-val { font-size: 12.5px; color: var(--text); line-height: 1.5; }
+
+/* ─── PITCH ─── */
+.pitch-box {
+  background: rgba(200,240,90,0.04);
+  border: 1px solid rgba(200,240,90,0.2);
+  border-radius: 6px;
+  padding: 12px 14px;
+  margin-bottom: 18px;
+  font-size: 13px;
+  font-style: italic;
+  color: #d4e8a0;
+  line-height: 1.7;
+}
+.pitch-box .pitch-label { font-style: normal; font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: 6px; letter-spacing: 0.08em; }
+
+/* ─── Q SECTIONS ─── */
+.q-tabs { display: flex; gap: 0; margin-bottom: 0; border: 1px solid var(--border); border-radius: 6px 6px 0 0; overflow: hidden; }
+.q-tab {
+  flex: 1; padding: 8px 4px; text-align: center;
+  font-family: 'IBM Plex Mono', monospace; font-size: 11px;
+  cursor: pointer; border: none; background: var(--bg2);
+  color: var(--text3); transition: all 0.15s;
+  border-right: 1px solid var(--border);
+}
+.q-tab:last-child { border-right: none; }
+.q-tab.active { color: var(--text); background: var(--bg3); }
+.q-tab:hover:not(.active) { color: var(--text2); }
+
+.q-panel { display: none; border: 1px solid var(--border); border-top: none; border-radius: 0 0 6px 6px; overflow: hidden; margin-bottom: 18px; }
+.q-panel.active { display: block; }
+
+.q-item {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+}
+.q-item:last-child { border-bottom: none; }
+.q-item:hover { background: rgba(255,255,255,0.015); }
+
+.q-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: var(--text3); margin-bottom: 5px; display: flex; align-items: center; gap: 6px; }
+.q-dot { display: inline-block; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.q-text { font-size: 13px; color: var(--text); line-height: 1.65; }
+.q-text em { color: var(--text2); font-style: normal; font-size: 12px; display: block; margin-top: 4px; }
+.q-text strong { font-weight: 500; color: #e0e0e0; }
+
+/* ─── CAREER SECTION ─── */
+.career-grid { display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 18px; }
+.career-item { background: var(--bg2); border: 1px solid var(--border); border-radius: 6px; padding: 11px 13px; }
+.career-q { font-size: 13px; color: var(--text); margin-bottom: 4px; line-height: 1.6; }
+.career-why { font-size: 11.5px; color: var(--text2); line-height: 1.55; }
+
+/* ─── SCROLL TARGET ─── */
+.co-anchor { scroll-margin-top: 70px; }
+
+/* ─── FOOTER ─── */
+.footer { padding: 20px 16px; border-top: 1px solid var(--border); font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text3); }
+
+/* Color accent lines per company */
+.co-1 .co-header { border-left: 3px solid var(--c1); padding-left: 13px; }
+.co-2 .co-header { border-left: 3px solid var(--c2); padding-left: 13px; }
+.co-3 .co-header { border-left: 3px solid var(--c3); padding-left: 13px; }
+.co-4 .co-header { border-left: 3px solid var(--c4); padding-left: 13px; }
+.co-5 .co-header { border-left: 3px solid var(--c5); padding-left: 13px; }
+.co-6 .co-header { border-left: 3px solid var(--c6); padding-left: 13px; }
+.co-7 .co-header { border-left: 3px solid var(--c7); padding-left: 13px; }
+
+.co-1 .q-tab.active, .co-1 .q-tab:hover:not(.active) { color: var(--c1); }
+.co-2 .q-tab.active, .co-2 .q-tab:hover:not(.active) { color: var(--c2); }
+.co-3 .q-tab.active, .co-3 .q-tab:hover:not(.active) { color: var(--c3); }
+.co-4 .q-tab.active, .co-4 .q-tab:hover:not(.active) { color: var(--c4); }
+.co-5 .q-tab.active, .co-5 .q-tab:hover:not(.active) { color: var(--c5); }
+.co-6 .q-tab.active, .co-6 .q-tab:hover:not(.active) { color: var(--c6); }
+.co-7 .q-tab.active, .co-7 .q-tab:hover:not(.active) { color: var(--c7); }
+
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <span class="topbar-title">HM2026 · 4月24日作战手册</span>
+  <span class="topbar-warn">⏰ 拆撤15:00开始 · 有效6小时</span>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <h1>汉诺威工业展 <span>参馆手册</span></h1>
+  <div class="hero-meta">
+    <span class="hero-pill">Apr 24, 2026</span>
+    <span class="hero-pill">09:00 – 15:00</span>
+    <span class="hero-pill">7个展位</span>
+    <span class="hero-pill">KG · LLM · Causality</span>
+    <span class="hero-pill">求职 + 技术交流</span>
+  </div>
+</div>
+
+<!-- SCHEDULE STRIP -->
+<div class="schedule">
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c1)"></span>
+    <div class="sched-time">09:00–09:30</div>
+    <div class="sched-co" style="color:var(--c1)">Fraunhofer</div>
+    <div class="sched-loc">Hall 11 · D33</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c2)"></span>
+    <div class="sched-time">09:30–09:55</div>
+    <div class="sched-co" style="color:var(--c2)">DFKI</div>
+    <div class="sched-loc">Hall 11 · B30</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c3)"></span>
+    <div class="sched-time">10:10–10:30</div>
+    <div class="sched-co" style="color:var(--c3)">ApeiroRA</div>
+    <div class="sched-loc">Hall 13 · C24</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c4)"></span>
+    <div class="sched-time">10:40–11:40</div>
+    <div class="sched-co" style="color:var(--c4)">Bosch CI</div>
+    <div class="sched-loc">Hall 14 · J17</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c5)"></span>
+    <div class="sched-time">11:50–12:40</div>
+    <div class="sched-co" style="color:var(--c5)">SAP</div>
+    <div class="sched-loc">Hall 15 · F08</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c6)"></span>
+    <div class="sched-time">12:40–13:00</div>
+    <div class="sched-co" style="color:var(--c6)">AWS</div>
+    <div class="sched-loc">Hall 15 · D76</div>
+  </div>
+  <div class="sched-item">
+    <span class="sched-dot" style="background:var(--c7)"></span>
+    <div class="sched-time">13:30–15:00</div>
+    <div class="sched-co" style="color:var(--c7)">Siemens + Ethon</div>
+    <div class="sched-loc">Hall 27</div>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="nav-pills">
+  <a href="#co1" class="nav-pill" style="color:var(--c1);border-color:rgba(200,240,90,0.3)">① Fraunhofer</a>
+  <a href="#co2" class="nav-pill" style="color:var(--c2);border-color:rgba(90,240,200,0.3)">② DFKI</a>
+  <a href="#co3" class="nav-pill" style="color:var(--c3);border-color:rgba(167,139,250,0.3)">③ ApeiroRA</a>
+  <a href="#co4" class="nav-pill" style="color:var(--c4);border-color:rgba(240,168,58,0.3)">④ Bosch</a>
+  <a href="#co5" class="nav-pill" style="color:var(--c5);border-color:rgba(58,176,240,0.3)">⑤ SAP</a>
+  <a href="#co6" class="nav-pill" style="color:var(--c6);border-color:rgba(240,90,154,0.3)">⑥ AWS</a>
+  <a href="#co7" class="nav-pill" style="color:var(--c7);border-color:rgba(240,122,58,0.3)">⑦ Siemens/Ethon</a>
+</div>
+
+
+<!-- ═══════════════ CO 1: FRAUNHOFER ═══════════════ -->
+<div class="company co-1" id="co1">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">01 · HALL 11 D33 · 09:00–09:30</div>
+      <div class="co-name" style="color:var(--c1)">Fraunhofer-Gesellschaft</div>
+      <div class="co-tagline">德国最大应用研究机构 · 29个展项 · AI+工业+数字化转型</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 11, Stand D33</span>
+        <span class="badge badge-match">AI Research</span>
+        <span class="badge badge-job">Postdoc Target</span>
+        <span class="badge badge-match">KG+Causality</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标</div>
+      <div class="goal-text">拿到 <strong>Fraunhofer IAIS（人工智能研究所）</strong> 在场研究员的联系方式，明确 postdoc/researcher 职位的申请路径。次目标：了解 IAIS/IOSB 在 KG+Causal AI 方向的当前项目，判断研究契合度。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 机构快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">规模</div><div class="snap-val">75个研究所，32,000名员工，年营业额36亿欧元</div></div>
+        <div class="snap-item"><div class="snap-key">AI重点机构</div><div class="snap-val">IAIS（圣奥古斯丁）、IOSB（卡尔斯鲁厄）、IML（多特蒙德）</div></div>
+        <div class="snap-item"><div class="snap-key">HM2026展示主题</div><div class="snap-val">工业AI实用化、数据生态系统、弹性生产、循环经济</div></div>
+        <div class="snap-item"><div class="snap-key">与你的关联</div><div class="snap-val">IAIS专注KG+可信AI；IOSB做工业决策支持；均与LUH有合作网络</div></div>
+        <div class="snap-item"><div class="snap-key">职位类型</div><div class="snap-val">Research Scientist、Group Leader、Postdoc（德国正式雇用合同）</div></div>
+        <div class="snap-item"><div class="snap-key">薪资参考</div><div class="snap-val">TVöD E13–E15级，~50K–75K EUR/年，项目奖金另算</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I'm Hao Huang, finishing my PhD at LUH/TIB in July — my research combines knowledge graphs and causal inference for industrial decision-making, including a collaboration with Bosch on root cause analysis. I'm looking at Fraunhofer IAIS for post-PhD positions. Is anyone from IAIS here today, or could you point me to who handles AI research recruitment?"
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-1">
+      <button class="q-tab active" onclick="switchTab('1','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('1','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('1','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-1-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>ONTOLOGY ALIGNMENT</div>
+        <div class="q-text">In Fraunhofer's data ecosystem projects, how do you handle ontology alignment across heterogeneous industrial standards — IEC CIM, RAMI 4.0, OPC UA, and domain-specific schemas? Is there a cross-domain upper ontology being standardized, or is mapping done per project?<em>→ 了解你未来可能加入的数据基础设施方向，及FAIR数据原则的实际执行情况</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>KG QUALITY & VALIDATION</div>
+        <div class="q-text">What's the current state of automated KG quality validation in industrial settings? Are Fraunhofer projects using SHACL constraints, or more dynamic approaches like embedding-based anomaly detection for graph consistency?<em>→ 直接对应你的 SDM-RDFizer + SHACL 经验，判断技术栈匹配度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>FEDERATED KNOWLEDGE</div>
+        <div class="q-text">How are Fraunhofer institutes approaching federated knowledge graphs — where different plants or companies own subgraphs but need to share selective knowledge without full data exposure? Is this an active research direction for IAIS?<em>→ 与 Gaia-X / Manufacturing-X 数据空间方向有关，了解未来项目机会</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-1-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>SOVEREIGN LLM DEPLOYMENT</div>
+        <div class="q-text">What's Fraunhofer's preferred approach for deploying LLMs in research contexts with sensitive industrial data — on-premise sovereign models, private cloud, or specific cloud APIs with data processing agreements? Which models are researchers using day-to-day?<em>→ 影响你未来工作环境的基础设施判断</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>GraphRAG vs VECTOR RAG</div>
+        <div class="q-text">In Fraunhofer projects that combine structured KG data with LLMs, are you seeing better retrieval precision with GraphRAG (SPARQL-grounded) vs pure vector similarity search? What are the engineering bottlenecks in production GraphRAG pipelines?<em>→ 了解当前 RAG 工程挑战，对应你的 KG_Entity_Search 项目经验</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>LLM EVALUATION IN RESEARCH</div>
+        <div class="q-text">For LLM-based industrial AI systems, how do Fraunhofer institutes handle evaluation beyond standard benchmarks — especially in domains where ground truth is expensive to annotate, like process anomaly explanation or maintenance reasoning?<em>→ 对应你的实验严谨性和评估设计经验</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-1-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>CAUSAL AI PROJECTS</div>
+        <div class="q-text">Is there a Fraunhofer institute specifically working on causal AI for industrial applications — causal discovery from observational manufacturing data, or causal inference for process optimization? I'm particularly looking at IAIS and IOSB as potential research homes.<em>→ 直接问出哪个所有人在做，节省后续调研时间</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>KG AS CAUSAL PRIOR</div>
+        <div class="q-text">My research integrates domain knowledge from KGs as structural priors for causal discovery algorithms — like injecting forbidden/required edges from an ontology into the GES or PC algorithm. Are any Fraunhofer groups exploring this direction, or is causal AI mostly pursued independently from KG work?<em>→ 这是你最独特的研究贡献，用来测试对方研究深度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c1)"></span>COUNTERFACTUAL EXPLANATIONS</div>
+        <div class="q-text">For industrial AI systems requiring regulatory compliance or explainability — like predictive maintenance in safety-critical systems — how are Fraunhofer projects approaching counterfactual explanations? Is the focus more on algorithmic counterfactuals or causal model-based ones?<em>→ 与你的 HyKG-CF 工作直接相关</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"How does the researcher career ladder work at Fraunhofer — is there a tenure-track equivalent, or is it primarily project-funded rolling contracts?"</div>
+        <div class="career-why">了解职业稳定性：Fraunhofer 有永久职位（Festanstellung）但多数是项目合同，需要明确。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"What's the publication culture like — are researchers expected to publish at top-tier AI venues (NeurIPS/ICLR), or is conference publication secondary to industry transfer?"</div>
+        <div class="career-why">Fraunhofer 以应用为主，但 IAIS 有强学术输出。需要确认你的论文产出节奏能否维持。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"Is it common for Fraunhofer researchers to start or spin out companies from their research? What's the IP policy — does Fraunhofer retain rights to all inventions?"</div>
+        <div class="career-why">如果你未来有创业方向（如把 KG4Cause 做成产品），需要提前了解限制。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"For someone coming from a Chinese university background via LUH — is there a formal process for hiring non-EU researchers, and how long does the work permit take?"</div>
+        <div class="career-why">你已有德国居留，但确认 Fraunhofer 的 HR 流程对国际背景研究员的熟悉度。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 2: DFKI ═══════════════ -->
+<div class="company co-2" id="co2">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">02 · HALL 11 B30 · 09:30–09:55</div>
+      <div class="co-name" style="color:var(--c2)">DFKI — 德国人工智能研究中心</div>
+      <div class="co-tagline">35年AI研究 · Trusted AI · 工业LLM流程建模 · 决策支持</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 11, Stand B30</span>
+        <span class="badge badge-match">Industrial AI LLM</span>
+        <span class="badge badge-match">Decision Support</span>
+        <span class="badge badge-job">Research Scientist</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标</div>
+      <div class="goal-text">确认 DFKI 哪个团队在做 <strong>工业LLM流程建模 + 决策支持</strong>，找到对应团队负责人联系方式。DFKI 是德国AI研究的最高名片，对你的学术简历价值极高。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 机构快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">总部</div><div class="snap-val">萨尔布吕肯（主campus）+ 凯泽斯劳滕、柏林、不来梅、汉堡等</div></div>
+        <div class="snap-item"><div class="snap-key">HM2026亮点</div><div class="snap-val">"AI in industrial process planning with LLMs"、Trusted AI、工业导航决策支持</div></div>
+        <div class="snap-item"><div class="snap-key">规模</div><div class="snap-val">~1,100名研究人员，年预算约2.5亿欧元</div></div>
+        <div class="snap-item"><div class="snap-key">合作机构</div><div class="snap-val">TU Kaiserslautern、Saarland University；与SAP、Bosch长期合作</div></div>
+        <div class="snap-item"><div class="snap-key">最相关部门</div><div class="snap-val">Smart Data & Knowledge Services、Innovative Retail Laboratory、IUI</div></div>
+        <div class="snap-item"><div class="snap-key">职位性质</div><div class="snap-val">PhD后直聘 Research Scientist；部分是项目制，部分有长期职位</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I saw DFKI's work on AI in industrial process planning with LLMs — that's very close to my PhD research, where I combine knowledge graphs with causal discovery and LLM-based causal orientation. I'm finishing at LUH in July. Which research group here is leading the industrial LLM + process modeling work? I'd love to have a 5-minute conversation."
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-2">
+      <button class="q-tab active" onclick="switchTab('2','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('2','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('2','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-2-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>PROCESS KNOWLEDGE REPRESENTATION</div>
+        <div class="q-text">In DFKI's industrial process planning work with LLMs — how do you represent process knowledge? Do you build explicit process ontologies (OWL/RDF) as a grounding layer, rely on structured prompting, or use fine-tuned models with implicit knowledge? What's the precision/recall trade-off you see?<em>→ 核心技术问题，判断他们的方法与你的 KG+LLM 管道的异同</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>KG FOR TRUSTED AI</div>
+        <div class="q-text">DFKI's Trusted AI framework emphasizes traceability and auditability. How does a knowledge graph layer contribute to that — is it primarily for provenance tracking (which triples grounded which output), or also for constraint checking (SHACL validation of AI decisions)?<em>→ 你的工作正好在这个接口，可以展示你的 SHACL + KG validation 经验</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-2-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>LLM IN REGULATED SETTINGS</div>
+        <div class="q-text">For industrial AI systems in regulated environments — how does DFKI achieve traceability for LLM outputs? Is it provenance tracking at the token/triple level, post-hoc LIME/SHAP explanation, or a more structured chain-of-thought approach that's auditable?<em>→ EU AI Act 合规问题，对你未来做工业AI产品至关重要</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>HALLUCINATION MITIGATION</div>
+        <div class="q-text">In the process planning domain specifically — where LLM hallucinations could mean outputting a physically impossible manufacturing step — what's DFKI's current best practice for mitigation? Constrained decoding? SPARQL-validated RAG? Post-generation constraint checking?<em>→ 实际工程问题，有助于你理解工业LLM的落地挑战</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>SMALL vs LARGE MODELS</div>
+        <div class="q-text">In resource-constrained industrial edge settings, is DFKI seeing a trend toward smaller domain-specialized models (e.g., fine-tuned Llama/Mistral on process data) vs API-based frontier models? What's the latency/accuracy trade-off in practice?<em>→ 与你的 edge LLM 部署经验（Jetson AGX Orin）直接相关，可以分享</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-2-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>CAUSAL AI FOR NAVIGATION</div>
+        <div class="q-text">In DFKI's decision support systems for semi-autonomous navigation — you're using AI for safety-critical decisions. Are these causal models (do-calculus level), or primarily learned policies? How do you validate causal assumptions in dynamic real-world environments where the data distribution shifts?<em>→ 测试他们的因果方法论深度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c2)"></span>CAUSAL DISCOVERY FROM LOGS</div>
+        <div class="q-text">For industrial process AI — given you have massive production logs but limited interventional data — how are you approaching causal structure learning? Constraint-based (PC/FCI), score-based (GES/NOTEARS), or hybrid? And how do you incorporate prior knowledge from process documentation?<em>→ 这是你论文的核心，可以在这里自然过渡到介绍你的 KG4Cause 工作</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"What's the typical career path after a Research Scientist position at DFKI — do most people move to industry (SAP, Siemens), stay in academia, or spin out startups?"</div>
+        <div class="career-why">DFKI alumni network 非常值钱，了解典型出路帮助你判断这个职位对你职业的战略价值。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"Is there a formal way to apply for a Research Scientist position at DFKI outside of responding to specific project postings — for instance, a speculative application to a research group directly?"</div>
+        <div class="career-why">DFKI 的很多职位不公开招聘，了解内部路径比 jobs portal 更有效。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"How much industry collaboration is expected from researchers — is it balanced with blue-sky research, or heavily contract-driven? Does DFKI have dedicated exploratory research funding?"</div>
+        <div class="career-why">你希望保持研究深度，需要确认不会陷入纯咨询/项目模式。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 3: ApeiroRA ═══════════════ -->
+<div class="company co-3" id="co3">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">03 · HALL 13 C24 · 10:10–10:30</div>
+      <div class="co-name" style="color:var(--c3)">ApeiroRA</div>
+      <div class="co-tagline">企业AI知识平台 · DE Walldorf · SAP生态 · KG+GenAI</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 13, Stand C24</span>
+        <span class="badge badge-match">Enterprise KG Platform</span>
+        <span class="badge badge-job">德国本土</span>
+        <span class="badge badge-match">GenAI+KG</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标</div>
+      <div class="goal-text">确认公司规模和融资阶段，判断是否适合作为 <strong>早期技术岗位目标</strong>。如果创始人在场（公司较小，可能性高），直接技术交流 + 探讨职位可能性。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 公司快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">位置</div><div class="snap-val">Walldorf, DE（SAP总部旁，德国软件重镇）</div></div>
+        <div class="snap-item"><div class="snap-key">定位</div><div class="snap-val">企业级AI知识平台，专注Knowledge Graph + 生成式AI集成</div></div>
+        <div class="snap-item"><div class="snap-key">生态</div><div class="snap-val">与 Plattform Industrie 4.0 同厅，SAP 生态圈</div></div>
+        <div class="snap-item"><div class="snap-key">推测阶段</div><div class="snap-val">早期创业（参展规模、位置推测），需现场确认</div></div>
+        <div class="snap-item"><div class="snap-key">技术方向</div><div class="snap-val">企业KG构建、LLM grounding、知识检索增强</div></div>
+        <div class="snap-item"><div class="snap-key">吸引力</div><div class="snap-key"></div><div class="snap-val">德国本土，地理合适；技术栈直接匹配；早期加入影响力大</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I'm researching enterprise knowledge graph architectures for my PhD at LUH — I've built KG pipelines over UMLS, Wikidata, and Gene Ontology, and I'm looking at how KGs ground LLM outputs in industrial settings. What's ApeiroRA's core differentiation in the enterprise KG space — are you more focused on knowledge construction, retrieval, or reasoning?"
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-3">
+      <button class="q-tab active" onclick="switchTab('3','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('3','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('3','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-3-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>SCHEMA DESIGN PHILOSOPHY</div>
+        <div class="q-text">What's your knowledge graph schema design philosophy for enterprise data — universal upper ontology (like SUMO or DOLCE), domain-specific schemas per customer, or a layered approach? How do you handle schema evolution when the underlying ERP data model changes?<em>→ 核心架构问题，判断他们的技术深度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>KG CONSTRUCTION PIPELINE</div>
+        <div class="q-text">How do you build the KG from heterogeneous enterprise sources — ETL + RML mappings, LLM-assisted entity extraction, or manual ontology engineering? What's the human-in-the-loop component for quality control?<em>→ 你有 SDM-RDFizer + RML 经验，判断技术匹配度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>MULTI-TENANT ISOLATION</div>
+        <div class="q-text">For a multi-customer enterprise platform — how do you handle knowledge graph isolation? Named graph partitioning in a shared triplestore, separate graph instances per tenant, or something more hybrid?<em>→ 实际工程挑战，判断他们的产品成熟度</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-3-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>GROUNDING VALIDATION</div>
+        <div class="q-text">How do you validate that LLM outputs are grounded in the actual KG state — rather than hallucinating plausible-sounding enterprise facts? Do you use SPARQL query verification, triple-level confidence scoring, or post-generation fact-checking?<em>→ 最关键的产品质量问题</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>RETRIEVAL STRATEGY</div>
+        <div class="q-text">What's your retrieval strategy — pure graph traversal (SPARQL/Cypher), embedding-based similarity over graph nodes, or a hybrid? How do you handle multi-hop queries where the answer requires traversing 3+ edges?<em>→ GraphRAG 核心问题，你在 KG_Entity_Search 项目中处理过类似问题</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-3-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>CAUSAL LAYER PLANS</div>
+        <div class="q-text">Is there a roadmap to add causal reasoning to the platform — for example, causal attribution of business KPIs or root cause analysis of process failures? Or is the current focus purely on semantic retrieval and question-answering?<em>→ 如果他们有这个方向，你就是最合适的人</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c3)"></span>REASONING BEYOND RETRIEVAL</div>
+        <div class="q-text">What's the boundary between retrieval (finding relevant facts) and reasoning (deriving new facts or causal explanations) in your platform? Do you use SPARQL CONSTRUCT for rule-based inference, or are LLMs handling all the reasoning steps?<em>→ 了解平台的推理能力天花板，判断你能做什么工作</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"What's the team size and current stage — seed, Series A? And is the founding team technical or business-focused?"</div>
+        <div class="career-why">初创公司判断必问：了解资金runway、技术团队占比、创始人背景。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"For a PhD researcher joining early — what would the role look like? More research-oriented, or mainly product engineering?"</div>
+        <div class="career-why">确认你不会从研究者变成纯工程师。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"Are you open to candidates available from August 2026, and is there flexibility on working location (remote/hybrid)?"</div>
+        <div class="career-why">确认时间线和地理可行性。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 4: BOSCH ═══════════════ -->
+<div class="company co-4" id="co4">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">04 · HALL 14 J17 · 10:40–11:40 ⭐ 核心</div>
+      <div class="co-name" style="color:var(--c4)">Bosch Connected Industry</div>
+      <div class="co-tagline">Manufacturing Co-Intelligence · Agentic AI · Semantic Digital Twins · 你的合作方</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 14, Stand J17</span>
+        <span class="badge badge-collab">现有 RCA 合作</span>
+        <span class="badge badge-match">Semantic KG</span>
+        <span class="badge badge-match">Causal AI</span>
+        <span class="badge badge-job">Applied Scientist</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标（最重要）</div>
+      <div class="goal-text"><strong>不是求职者拜访，是合作方续谈。</strong> 目标一：拿到 Josepha Pfeiffer / Dr. Birgit Boss 所在团队技术负责人的直接邮箱（不是HR）。目标二：了解 Bosch CI 在 AI 研发的具体招聘方向，确认 Applied Scientist 职位的实际开放情况。目标三：如果合适，当场询问是否可以在毕业后以 Research Engineer 身份加入当前合作项目。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 公司快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">业务定位</div><div class="snap-val">Bosch集团工业互联网/AI部门，2026年首次参展HM</div></div>
+        <div class="snap-item"><div class="snap-key">核心理念</div><div class="snap-val">Manufacturing Co-Intelligence®：人+软件+AI协同生产</div></div>
+        <div class="snap-item"><div class="snap-key">技术方向</div><div class="snap-val">Agentic AI、Semantic Digital Twins、Asset Administration Shell（AAS）</div></div>
+        <div class="snap-item"><div class="snap-key">关键人员</div><div class="snap-val">Dr. Birgit Boss（Semantic DT专家、IDTA Board）；Josepha Pfeiffer（数字孪生）</div></div>
+        <div class="snap-item"><div class="snap-key">你的关联</div><div class="snap-val">Root Cause Analysis合作项目；RCA正是 Bosch CI 的核心工业场景</div></div>
+        <div class="snap-item"><div class="snap-key">总部</div><div class="snap-val">斯图加特区域（Reutlingen）；大规模研发在 Renningen 研究院</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I'm Hao Huang from Leibniz University Hannover and TIB — I've been collaborating with Bosch on the root cause analysis project over the past year. I'm finishing my PhD in July and am looking at opportunities to continue this direction. Is there someone from the RCA or Industrial AI research team I could speak with for a few minutes?"
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-4">
+      <button class="q-tab active" onclick="switchTab('4','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('4','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('4','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-4-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>KG IN MANUFACTURING CO-INTELLIGENCE</div>
+        <div class="q-text">In your Manufacturing Co-Intelligence framework, how is the knowledge graph structured — is it primarily an asset ontology based on AAS (Asset Administration Shell), a process execution graph, or a hybrid? And how do you handle the schema evolution problem when manufacturing lines change?<em>→ 直接问产品架构，展示你知道 AAS 标准（IDTA）</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>SEMANTIC DIGITAL TWIN</div>
+        <div class="q-text">Dr. Boss's work on semantic digital twins goes beyond just AAS — how does Bosch use ontological reasoning (OWL/RDF) on top of the twin data model? For example, is there automated consistency checking when twin states violate physical constraints defined in the ontology?<em>→ 针对 Dr. Boss 的具体工作，展示你做过功课</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>CROSS-PLANT KG INTEGRATION</div>
+        <div class="q-text">When Bosch scales Manufacturing Co-Intelligence across different plants with different equipment vendors and data formats — how do you achieve semantic interoperability? Is there a Bosch manufacturing upper ontology, or do you rely on OPC UA / RAMI 4.0 as the alignment layer?<em>→ 你的 KG construction pipeline 经验直接可以迁移到这里</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-4-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>LLM FOR MAINTENANCE KNOWLEDGE</div>
+        <div class="q-text">Are you using LLMs to extract and structure knowledge from unstructured maintenance logs, repair manuals, and technician notes into the KG? What's the pipeline — fine-tuned extraction model, in-context learning with GPT-4-level models, or RAG over existing structured data?<em>→ 你的 LLM pipeline 经验可以在这里展示</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>AGENTIC AI IN PRODUCTION</div>
+        <div class="q-text">Bosch is pushing Agentic AI for manufacturing — what does a typical agent workflow look like in your production context? How do agents interact with the KG backend — direct SPARQL queries, a tool-calling interface, or a higher-level semantic API? How do you handle agent failures in safety-critical scenarios?<em>→ 工业 Agentic AI 的实际工程挑战，与你的 OpenClaw 项目经验相通</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-4-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>RCA METHODOLOGY — 直接关联你的合作</div>
+        <div class="q-text">In the Root Cause Analysis collaboration — what's the current bottleneck? Is it causal discovery (finding the causal structure from sensor data), causal inference (estimating effect sizes), or the KG-to-algorithm interface (encoding domain knowledge as structural priors)? I want to understand where the gap is between the research prototype and production deployment.<em>→ 这是最重要的问题，直接涉及你们的合作项目</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>CAUSAL DISCOVERY ALGORITHM CHOICE</div>
+        <div class="q-text">For Bosch's RCA use cases — are you using constraint-based algorithms (PC/FCI), score-based (GES/NOTEARS), or interventional methods? My work integrates KG priors directly into GES — but I'm curious if Bosch prefers methods that can handle cyclic causal graphs (common in manufacturing feedback loops).<em>→ 展示你对 causal discovery 算法家族的深度，引出你的 GES-Prior 工作</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c4)"></span>COUNTERFACTUAL RCA</div>
+        <div class="q-text">Once the causal model is learned — how are Bosch engineers using it for RCA in practice? Purely observational queries ("what caused this failure?"), or also counterfactual reasoning ("if we had changed parameter X, would the failure have been avoided?")? My HyKG-CF framework addresses exactly this second question.<em>→ 自然地介绍你的 WSDM 2025 论文成果</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"Is there a formal Applied Scientist or Research Engineer track at Bosch Connected Industry — separate from the main Bosch R&D structure?"</div>
+        <div class="career-why">Bosch CI 作为相对独立的业务单元，其职业路径可能和传统 Bosch 研究院不同，需要确认。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"For the RCA collaboration — is there a possibility of continuing the work in an employment context after I finish my PhD in July, perhaps as a continuation of the existing project?"</div>
+        <div class="career-why">直接问，这是最自然的转化路径，不要等对方主动提。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"What's the balance between publishing research results and keeping work proprietary at Bosch CI — especially for AI methodology papers where the industrial data can't be shared?"</div>
+        <div class="career-why">你要维持学术输出节奏，这个问题很关键。Bosch 一般允许方法论论文发表，但工业数据保密。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"Is the AI research team primarily in Stuttgart/Reutlingen, or distributed? And does Bosch support remote work for research positions?"</div>
+        <div class="career-why">了解你是否需要搬家，以及工作灵活度。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 5: SAP ═══════════════ -->
+<div class="company co-5" id="co5">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">05 · HALL 15 F08 · 11:50–12:40</div>
+      <div class="co-name" style="color:var(--c5)">SAP</div>
+      <div class="co-tagline">Business AI · Joule · KG+GenAI · Req.442802/442803 目标岗位</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 15, Stand F08</span>
+        <span class="badge badge-job">Target Employer</span>
+        <span class="badge badge-match">KG+GenAI Roles</span>
+        <span class="badge badge-match">Garching R&D</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标</div>
+      <div class="goal-text">如已预约：赴约，直接推进技术对话。如未预约：找 Recruiting/Talent 台，<strong>报出 Req 号码</strong>（442802/442803），要求引荐对应的 Hiring Manager 或 Technical Lead 联系方式。不要只拿宣传册，要拿人。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 公司快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">Garching研发</div><div class="snap-val">SAP Munich Research Lab，专注 Business AI + KG + NLP</div></div>
+        <div class="snap-item"><div class="snap-key">核心产品</div><div class="snap-val">Joule（AI copilot）、SAP HANA（图数据库）、Business Network</div></div>
+        <div class="snap-item"><div class="snap-key">KG在SAP的角色</div><div class="snap-val">企业数据语义层；Joule retrieval grounding；Manufacturing KG</div></div>
+        <div class="snap-item"><div class="snap-key">岗位方向</div><div class="snap-val">Applied Scientist（KG+GenAI），工业AI场景</div></div>
+        <div class="snap-item"><div class="snap-key">HM2026重点</div><div class="snap-val">Business AI、Manufacturing AI、Connected Supply Chain</div></div>
+        <div class="snap-item"><div class="snap-key">规模</div><div class="snap-val">105,000+ 员工，年收入350亿欧元，DAX成员</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I have active applications in for the Knowledge Graph + GenAI researcher roles in Garching — Req 442802 and 442803. I'm finishing my PhD at LUH in July, with published work at WSDM on hybrid KG + causal inference, and I've built end-to-end KG pipelines over UMLS, Wikidata, and Gene Ontology. I wanted to connect with the technical team in person — is there someone from the Garching research group I could speak with for 10 minutes?"
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-5">
+      <button class="q-tab active" onclick="switchTab('5','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('5','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('5','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-5-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>JOULE KG ARCHITECTURE</div>
+        <div class="q-text">Where does the knowledge graph layer sit in the Joule architecture — is it primarily for entity resolution and retrieval grounding (finding the right SAP objects for a query), or are you also doing schema-level ontological reasoning (inferring relationships between business concepts)? What's the graph database under the hood — HANA Graph, or a separate triplestore?<em>→ 了解你未来工作的技术栈深度</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>ENTERPRISE ONTOLOGY</div>
+        <div class="q-text">SAP has decades of enterprise data models (SAP Data Model). How much of that is expressed as a formal ontology (OWL/RDF) vs procedural schema definitions? Is there an active effort to ontologize the SAP data model for semantic reasoning, or is the KG mainly a graph of instances?<em>→ 关键背景，影响你工作的技术边界</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>MANUFACTURING KG</div>
+        <div class="q-text">For SAP's Manufacturing AI direction — how does the KG encode manufacturing process knowledge vs production asset data? Is there integration with external industrial ontologies (IEC 62264, ISA-95), or is it a SAP-proprietary schema? I'm asking because my RCA work with Bosch ran into exactly this interoperability challenge.<em>→ 结合你的 Bosch 合作经验，展示实践深度</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-5-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>JOULE HALLUCINATION MITIGATION</div>
+        <div class="q-text">When Joule grounds responses in enterprise KG data, how do you prevent hallucination of plausible-but-wrong SAP object references? Is it SPARQL-validated RAG, triple-level confidence scoring, or constrained decoding that forces the model to only reference verified entities?<em>→ 最关键的产品质量问题，也是你可以贡献研究的地方</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>LLM FOR KG CONSTRUCTION</div>
+        <div class="q-text">Is SAP using LLMs to help construct or expand the enterprise KG — for example, extracting relationships from unstructured SAP documentation, emails, or process logs? Or is the KG entirely structured-data-derived? My LLMCD work uses LLMs for causal structure learning — a similar paradigm.<em>→ 自然引出你的 LLMCD 论文</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span">MULTI-AGENT KG INTERACTION</div>
+        <div class="q-text">In SAP's agentic AI work — when multiple agents collaborate on a task (e.g., supply chain orchestration), how do they share and update a shared knowledge representation? Is the KG the synchronization layer, or is that handled by a separate state management component?<em>→ 前沿问题，展示你对 Agentic AI + KG 的思考</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-5-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>CAUSAL AI IN BUSINESS PROCESSES</div>
+        <div class="q-text">Is there causal reasoning in SAP's decision intelligence layer — for example, causal attribution of supply chain disruptions, quality failures, or financial variance? Or is the current approach primarily predictive/correlational, with causal AI on the research roadmap?<em>→ 探索你的研究方向在 SAP 产品里的落地空间</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c5)"></span>COUNTERFACTUAL BUSINESS SIMULATION</div>
+        <div class="q-text">For supply chain resilience — does SAP's planning AI support counterfactual "what-if" scenarios based on causal models? For instance: "if supplier X had delivered on time, what would the downstream production impact have been?" That kind of interventional reasoning requires a causal model, not just a predictive one.<em>→ 把你的 HyKG-CF 工作映射到 SAP 的业务场景</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"For the Garching R&D roles — is the primary focus research publication (like SAP Research), or product feature development? What's the target venue for research output — top AI conferences, or more industry-focused?"</div>
+        <div class="career-why">SAP Research vs SAP Labs 文化差异很大，需要确认你加入的是哪个性质的团队。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"Is there an Applied Scientist career ladder at SAP separate from the Software Engineer ladder — with explicit expectations around publications, patents, and research leadership?"</div>
+        <div class="career-why">大公司里 Applied Scientist track 是否被认可和晋升路径是否清晰，关系到你5年后的位置。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"How long is the typical hiring cycle from application to offer for research roles in Garching — and is there flexibility on start date for August 2026?"</div>
+        <div class="career-why">时间线管理，确保毕业和入职衔接顺畅。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"What's the collaboration dynamic between Garching Research and SAP product teams — are research ideas fast-tracked into products, or does it go through a longer transfer process?"</div>
+        <div class="career-why">你的 research-to-production 强项需要一个能快速落地的环境，了解实际障碍。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 6: AWS ═══════════════ -->
+<div class="company co-6" id="co6">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">06 · HALL 15 D76 · 12:40–13:00</div>
+      <div class="co-name" style="color:var(--c6)">Amazon Web Services</div>
+      <div class="co-tagline">Industrial AI · Knowledge Graph · Digital Thread · Edge-to-Cloud</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 15, Stand D76</span>
+        <span class="badge badge-match">Knowledge Graph (明确)</span>
+        <span class="badge badge-match">Agentic AI</span>
+        <span class="badge badge-job">EU Applied Science</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标</div>
+      <div class="goal-text">20分钟顺路访。AWS 展示明确包含 "queryable knowledge graphs + digital thread"。<strong>目标：找到 Applied Science / Research Science 岗位的欧洲 HR 联系路径，LinkedIn 连接展台工程师。</strong> 不需要深聊，留下好印象即可。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— 公司快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">HM2026展示重点</div><div class="snap-val">AI-Powered Product Journey（KG + digital thread + Agentic AI）</div></div>
+        <div class="snap-item"><div class="snap-key">KG产品</div><div class="snap-val">Amazon Neptune（RDF+openCypher）；AWS IoT SiteWise（工业数据）</div></div>
+        <div class="snap-item"><div class="snap-key">EU研发中心</div><div class="snap-val">柏林、慕尼黑、都柏林；Applied Science 团队分布</div></div>
+        <div class="snap-item"><div class="snap-key">你的关联</div><div class="snap-val">KG_Entity_Search项目（UMLS/Wikidata/OmniPath子图提取）= industrial KG的直接类比</div></div>
+        <div class="snap-item"><div class="snap-key">展台亮点</div><div class="snap-val">"Engineering & Development Tunnel" — CAD AI agents + digital thread knowledge assistant</div></div>
+        <div class="snap-item"><div class="snap-key">招聘方式</div><div class="snap-val">Amazon有严格的 bar-raiser 面试流程，了解路径比时间更重要</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 开场白</div>
+      "I saw the knowledge graph component in your Engineering & Development demo — I work on industrial KG pipelines for my PhD and I'm curious about the architecture. Are you using Neptune with RDF, property graph, or a hybrid for the digital thread knowledge assistant? And separately — I'm looking at Applied Science roles in Europe, who would be the right person to connect with on that?"
+    </div>
+
+    <div class="section-title">— 技术问题（精选，20分钟够用）</div>
+    <div class="q-tabs" id="tabs-6">
+      <button class="q-tab active" onclick="switchTab('6','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('6','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('6','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-6-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c6)"></span>NEPTUNE RDF vs PROPERTY GRAPH</div>
+        <div class="q-text">For industrial knowledge graphs in AWS — are customers predominantly using Neptune's RDF/SPARQL interface or openCypher property graph? When do you recommend one over the other for manufacturing use cases (asset hierarchies vs process flows)?<em>→ 了解两种范式在工业场景的实际选择偏好</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c6)"></span>DIGITAL THREAD KG</div>
+        <div class="q-text">The "digital thread knowledge assistant" in your demo — what's the underlying KG schema for connecting design data, manufacturing parameters, and quality outcomes? Is it a bespoke schema per customer, or is AWS pushing toward a standardized manufacturing ontology?<em>→ 直接对应你的 KG construction pipeline 经验</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-6-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c6)"></span>GraphRAG IN BEDROCK</div>
+        <div class="q-text">Amazon Bedrock Knowledge Bases — does it support GraphRAG (graph-based retrieval) natively, or is it primarily vector similarity? For industrial customers with highly structured data (BOMs, P&IDs), are you seeing precision gains from graph traversal over pure vector search?<em>→ 产品方向问题，判断 AWS 的技术路线</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c6)"></span>AGENTIC MANUFACTURING AI</div>
+        <div class="q-text">In the multi-agent manufacturing demo — how do agents coordinate access to the shared knowledge graph? Is there a locking mechanism for concurrent graph writes, or is the KG treated as read-only with agents writing to a separate state layer?<em>→ 工程细节问题，判断 AWS demo 的技术成熟度</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-6-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c6)"></span>CAUSAL ATTRIBUTION IN MANUFACTURING</div>
+        <div class="q-text">Are any of the AWS manufacturing AI use cases incorporating causal reasoning — for instance, causal attribution of quality failures across the production line, or counterfactual simulation for process optimization? Or is the current focus primarily on predictive/descriptive analytics?<em>→ 探索 AWS 在 causal AI 方向的投入，判断研究方向匹配度</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题（20分钟内选1-2个）</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">"For Applied Science roles in Europe — are there teams specifically working on industrial AI or knowledge graph infrastructure, and where are they based?"</div>
+        <div class="career-why">了解欧洲团队布局，判断是否有合适的岗位位置。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">"What does the research publication culture look like for Applied Scientists in AWS industrial teams — are papers encouraged, or is it primarily internal research?"</div>
+        <div class="career-why">AWS 的发表文化与 Google/Meta 不同，需要确认。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════ CO 7: SIEMENS + ETHON ═══════════════ -->
+<div class="company co-7" id="co7">
+  <div class="co-header co-anchor" onclick="toggle(this)">
+    <div class="co-meta">
+      <div class="co-num">07 · HALL 27 · 13:30–15:00 · 压轴</div>
+      <div class="co-name" style="color:var(--c7)">Siemens + Ethon（生态伙伴）</div>
+      <div class="co-tagline">Industrial AI整厅 · Living KG+Causal AI · Talent Acquisition全周在场</div>
+      <div class="co-badges">
+        <span class="badge badge-loc">📍 Hall 27（整厅）</span>
+        <span class="badge badge-job">Talent Acquisition 在场</span>
+        <span class="badge badge-warn">Ethon = 最精准技术匹配</span>
+        <span class="badge badge-match">Living KG + Causal AI</span>
+      </div>
+    </div>
+    <div class="co-toggle">+</div>
+  </div>
+  <div class="co-body">
+
+    <div class="goal-box">
+      <div class="goal-label">🎯 今日目标（双目标）</div>
+      <div class="goal-text"><strong>目标A（Siemens 招聘）：</strong> 找到 Talent Acquisition 台，完成 30 秒 pitch，被转介给具体的 Industrial AI 技术团队负责人（不只是填表）。<br><strong>目标B（Ethon）：</strong> 找到 Ethon 展示区，直接和 Ethon 技术人员聊 Living KG + Causal AI 的具体实现。这是全场技术匹配度最高的公司，可以当作第一次实质接触。</div>
+    </div>
+
+    <div class="snapshot">
+      <div class="section-title">— Siemens 快照</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">HM2026展厅布局</div><div class="snap-val">Digital Enterprise Showcase / Innovation Hub / Technology Deep Dive</div></div>
+        <div class="snap-item"><div class="snap-key">招聘方式</div><div class="snap-val">Talent Acquisition Team 全周在场，Hall 27，Guided Tours 台旁</div></div>
+        <div class="snap-item"><div class="snap-key">目标岗位方向</div><div class="snap-val">Digital Industries Software AI Research / Siemens Technology AI</div></div>
+        <div class="snap-item"><div class="snap-key">主要研发地</div><div class="snap-val">纽伦堡/埃尔兰根（DI SW）；慕尼黑（Siemens Technology）</div></div>
+      </div>
+      <div class="section-title" style="margin-top:12px">— Ethon 快照（重点）</div>
+      <div class="snapshot-grid">
+        <div class="snap-item"><div class="snap-key">官方描述</div><div class="snap-val">"Living knowledge graph + causal AI + agentic workflows + computer vision"</div></div>
+        <div class="snap-item"><div class="snap-key">成立时间</div><div class="snap-key"></div><div class="snap-val">慕尼黑初创，Siemens 生态合作伙伴（2019年）</div></div>
+        <div class="snap-item"><div class="snap-key">产品定位</div><div class="snap-val">工厂实时理解与控制：将所有数据源整合为有行动力的过程知识</div></div>
+        <div class="snap-item"><div class="snap-key">与你的关联</div><div class="snap-val">Living KG = 动态知识图谱；Causal AI = 你的核心；全栈 = 你的目标</div></div>
+      </div>
+    </div>
+
+    <div class="pitch-box">
+      <div class="pitch-label">💬 Siemens Recruiting 开场白</div>
+      "I'm finishing my PhD at LUH in July — KG + Causal AI for industrial decision-making, with a Bosch RCA collaboration. I'm looking at roles in Siemens Digital Industries or Siemens Technology specifically in industrial AI. Who on your team would be the right technical contact — not just the application portal, but someone who's hiring for research-oriented AI roles?"
+    </div>
+    <div class="pitch-box" style="border-color:rgba(240,122,58,0.3);background:rgba(240,122,58,0.05);color:#d4a070;">
+      <div class="pitch-label" style="color:#888">💬 Ethon 开场白</div>
+      "I've been following Ethon's work on the living knowledge graph + causal AI stack — it's very close to what I'm doing in my PhD. I work on integrating KG domain knowledge into causal discovery algorithms, and I just published at WSDM on hybrid KG-causal inference. I'd love to understand how your 'living KG' handles temporal dynamics — is it event-sourced, or are you doing in-place graph updates?"
+    </div>
+
+    <div class="section-title">— 技术问题</div>
+    <div class="q-tabs" id="tabs-7">
+      <button class="q-tab active" onclick="switchTab('7','kg')">Knowledge Graph</button>
+      <button class="q-tab" onclick="switchTab('7','llm')">LLM</button>
+      <button class="q-tab" onclick="switchTab('7','causal')">Causality</button>
+    </div>
+    <div class="q-panel active" id="panel-7-kg">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>ETHON: LIVING KG DYNAMICS</div>
+        <div class="q-text">The "living knowledge graph" concept is compelling — how do you handle temporal dynamics in the graph? Is it event-sourced with an append-only log and graph projections at query time, or are you doing real-time in-place updates? And how do you handle conflicting observations from different sensor sources?<em>→ 这是 Ethon 最核心的技术差异化点，直接问</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>ETHON: SCHEMA vs SCHEMALESS</div>
+        <div class="q-text">For a living KG that needs to adapt as factory configurations change — do you use a fixed ontology schema that gets extended, or a more schemaless property graph that accommodates arbitrary new node/edge types? How do you prevent schema entropy as the graph grows?<em>→ 工业 KG 的核心工程挑战，你有相关经验（RML + SDM-RDFizer）</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>SIEMENS: INDUSTRIAL KG STANDARDS</div>
+        <div class="q-text">Siemens is deeply involved in standardization (OPC UA, AAS, Gaia-X). How does the internal knowledge graph architecture align with these standards — is the KG a native AAS/OPC UA model, or does Siemens maintain a proprietary schema that maps to standards at the boundary?<em>→ 了解你未来工作的标准化环境</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-7-llm">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>ETHON: AGENT-TO-KG INTERFACE</div>
+        <div class="q-text">In Ethon's agentic workflows — how do agents query and update the living KG? Is it a SPARQL/Cypher interface, a natural language-to-graph query translation layer, or a higher-level semantic API? How do you handle agent hallucinations that might corrupt the KG state?<em>→ Agentic AI 与 KG 的关键接口问题</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>SIEMENS: INDUSTRIAL COPILOT</div>
+        <div class="q-text">The AI Industrial Copilot in Siemens NX/Teamcenter — what's the grounding mechanism for responses? When the copilot suggests a machining operation or design change, is that grounded in a formal KG of manufacturing constraints, or primarily in fine-tuned parametric knowledge?<em>→ 直接问 Siemens 的旗舰 AI 产品的技术底层</em></div>
+      </div>
+    </div>
+    <div class="q-panel" id="panel-7-causal">
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>ETHON: CAUSAL AI LAYER</div>
+        <div class="q-text">In Ethon's "causal AI" component — what level of causal reasoning is this? Is it (a) learned correlations labeled as causal for interpretability, (b) pre-specified causal DAGs from domain experts, or (c) automated causal discovery from observational factory data? The distinction matters enormously for how robust the "causal" claims are.<em>→ 这是最关键的技术问题，判断他们的方法论深度，也是你展示专业度的机会</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>ETHON: KG AS CAUSAL PRIOR</div>
+        <div class="q-text">My research integrates knowledge graph domain knowledge directly as structural priors into causal discovery algorithms — forbidden/required edges derived from an OWL ontology constrain the search space of algorithms like GES or PC. Is Ethon exploring a similar approach, or is the KG and causal layer currently running in parallel rather than integrated?<em>→ 自然介绍你的核心研究贡献，看对方反应</em></div>
+      </div>
+      <div class="q-item">
+        <div class="q-label"><span class="q-dot" style="background:var(--c7)"></span>SIEMENS: CAUSAL DIGITAL TWIN</div>
+        <div class="q-text">Siemens talks about "physics AI" for digital twins — combining physics models with learned AI. Is there a causal layer in this: where the physics model defines the causal structure, and the learned component fills in the parameters? Or are these two parallel approaches rather than integrated?<em>→ 高级问题，展示你对 causal + physics AI 交叉的思考</em></div>
+      </div>
+    </div>
+
+    <div class="section-title" style="margin-top:18px">— 职业规划问题</div>
+    <div class="career-grid">
+      <div class="career-item">
+        <div class="career-q">【Siemens Recruiting】"Which Siemens business unit is most actively hiring for industrial AI research right now — Digital Industries Software, Siemens Technology, or Smart Infrastructure? And which location?"</div>
+        <div class="career-why">让招聘官帮你过滤，避免你盲目申请所有岗位。Siemens 的不同业务单元文化和技术方向差异很大。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">【Siemens Recruiting】"For someone with a strong academic background — publications at WSDM, PhD from LUH — is there a research track at Siemens, or is it primarily engineering-oriented roles?"</div>
+        <div class="career-why">Siemens Technology 有更学术的研究文化，DISW 更产品化，需要招聘官指引方向。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">【Ethon】"What stage is Ethon at — Series A/B? And are you actively hiring for technical roles, specifically in knowledge graph architecture or causal AI?"</div>
+        <div class="career-why">Ethon 是小公司，直接问招聘状态最有效率。如果在招，你就是最合适的候选人。</div>
+      </div>
+      <div class="career-item">
+        <div class="career-q">【Ethon】"If I wanted to join Ethon after finishing my PhD in July — what would the role look like? More research-oriented, or production engineering of the KG/causal pipeline?"</div>
+        <div class="career-why">判断 Ethon 是否能满足你的研究深度需求，或者纯粹是工程开发。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<div class="footer">
+  KG · LLM · Causality — Apr 24, 2026 · 09:00–15:00 · Hannover Messe · 5 Halls · 7 Stops<br>
+  有效时间6h · 拆撤15:00 · Bosch=合作方身份 · SAP=报Req号 · Siemens=Talent Acquisition台 · Ethon=最精准匹配
+</div>
+
+<script>
+function toggle(header) {
+  const body = header.nextElementSibling;
+  const toggle = header.querySelector('.co-toggle');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  toggle.classList.toggle('open', !isOpen);
+}
+
+function switchTab(coId, tab) {
+  const tabs = document.querySelectorAll(`#tabs-${coId} .q-tab`);
+  const panels = document.querySelectorAll(`[id^="panel-${coId}-"]`);
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`panel-${coId}-${tab}`).classList.add('active');
+}
+
+// Open first company by default
+document.querySelector('.co-header').click();
+</script>
+</body>
+</html>
